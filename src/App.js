@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 //components
 import AddTodo from './components/AddTodo';
 import TodoList from './components/TodoList';
@@ -20,9 +20,9 @@ function App() {
   const saveLocalTodos = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   };
-  useEffect(() => {
-    saveLocalTodos();
-  }, [todos]);
+
+  saveLocalTodos();
+
   return (
     <div className='App'>
       <Router>

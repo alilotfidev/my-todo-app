@@ -1,24 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Link, Route, Switch } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+//components
+import AddTodo from './components/AddTodo';
+import TodoList from './components/TodoList';
+//images
+import addTodoIcon from './img/Plus.svg';
 
 function App() {
+  const getLocalTodos = () => {
+    const localTodos = JSON.parse(localStorage.getItem('todos'));
+    if (localTodos) {
+      return localTodos;
+    } else {
+      return [];
+    }
+  };
+  const [todos, setTodos] = useState(getLocalTodos());
+  const saveLocalTodos = () => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  };
+  useEffect(() => {
+    saveLocalTodos();
+  }, [todos]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Router>
+        <Switch>
+          <Route exact path='/'>
+            {todos && <TodoList todos={todos} setTodos={setTodos} />}
+            <Link to='/add'>
+              <button className='add-todo'>
+                <img src={addTodoIcon} alt='add to-do' />
+              </button>
+            </Link>
+          </Route>
+          <Route exact path='/add'>
+            <AddTodo todos={todos} setTodos={setTodos} />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }
